@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- 导航栏 -->
+<div class="sidebar text-left">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">SSM整合</a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li><a href="/customer/toSavePage"><strong>添加信息功能</strong></a></li>
+                    <li><a href="/customer/toListPage"><strong>分页查询功能</strong></a></li>
+                    <li><a>Create by TyCoding</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<br/>
+<div class="container">
+    <h1 class="text-center">客户列表信息页面</h1>
+    <hr/>
+    <br/>
+    <form class="form-inline" action="/customer/findByPage" method="post">
+        <div class="form-group">
+            <label>客户姓名：</label>
+            <input type="text" class="form-control" name="name"/>
+        </div>
+        &nbsp;&nbsp;
+        &nbsp;&nbsp;
+        <div class="form-group">
+            <label>客户电话</label>
+            <input type="text" class="form-control" name="telephone"/>
+        </div>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="form-group">
+            <input type="submit" value="查询" class="form-control btn btn-info"/>
+            &nbsp;&nbsp;
+            <input type="reset" value="重置" class="form-control btn btn-danger"/>
+        </div>
+    </form>
+    <br/>
+    <hr/>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead>
+            <tr>
+                <th style="text-align: center;">客户编号</th>
+                <th style="text-align: center;">客户姓名</th>
+                <th style="text-align: center;">客户电话</th>
+                <th style="text-align: center;">客户地址</th>
+                <th style="text-align: center;">客户备注</th>
+                <th style="text-align: center;">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer : ${page.beanList}" class="text-center">
+                <td th:text="${customer.id}"></td>
+                <td th:text="${customer.name}"></td>
+                <td th:text="${customer.telephone}"></td>
+                <td th:text="${customer.address}"></td>
+                <td th:text="${customer.remark}"></td>
+                <td>
+                    <a href="#" th:onclick="'javascript:edit('+${customer.id}+')'" style="text-decoration: none;">
+                        <span class="fa fa-edit fa-fw"></span>
+                    </a>
+                    <a href="#" th:onclick="'javascript:trash('+${customer.id}+')'" style="text-decoration: none;"
+                       data-toggle="modal" data-target="#trashModal">
+                        <span class="fa fa-trash-o fa-fw"></span>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <form class="listForm" method="post" action="/customer/findByPage">
+        <div class="row">
+            <div class="form-inline">
+                <label style="font-size:14px;margin-top:22px;">
+                    <strong>共<b th:text="${page.totalCount}"></b>条记录，共<b th:text="${page.totalPage}"></b>页</strong>
+                    &nbsp;
+                    &nbsp;
+                    <strong>每页显示</strong>
+                    <select class="form-control" name="pageSize" id="size">
+                        <option th:selected="${page.pageSize  == 2}" th:value="2">2</option>
+                        <option th:selected="${page.pageSize  == 3}" th:value="3">3</option>
+                        <option th:selected="${page.pageSize  == 4}" th:value="4">4</option>
+                        <option th:selected="${page.pageSize  == 5}" th:value="5">5</option>
+                    </select>
+                    <strong>条</strong>
+                    &nbsp;
+                    &nbsp;
+                    <strong>到第</strong>&nbsp;<input type="text" size="3" id="page" name="pageCode"
+                                                    class="form-control input-sm"
+                                                    style="width:11%"/>&nbsp;<strong>页</strong>
+                    &nbsp;
+                    <button type="submit" class="btn btn-sm btn-info">GO!</button>
+                </label>
+
+                <ul class="pagination" style="float:right;">
+                    <li>
+                        <a href="#" th:onclick="'javascript:findByPage(1)'"><strong>首页</strong></a>
+                    </li>
+                    <li th:if="${page.pageCode >= 2}">
+                        <a href="#" th:onclick="'javascript:findByPage('+${page.pageCode - 1}+')'">&laquo;</a>
+                    </li>
+                    <li th:if="${page.pageCode - 2 >=1}">
+                        <a href="#" th:onclick="'javascript:findByPage('+${page.pageCode - 2}+')'" th:text="${page.pageCode - 2}"></a>
+                    </li>
+                    <li th:if="${page.pageCode - 1 >=1}">
+                        <a href="#" th:onclick="'javascript:findByPage('+${page.pageCode - 1}+')'" th:text="${page.pageCode - 1}"></a>
+                    </li>
+                    <li class="active"><a href="#" th:text="${page.pageCode}">1</a></li>
+                    <li th:if="${page.pageCode + 1 <= page.totalPage}">
+                        <a href="#" th:onclick="'javascript:findByPage('+${page.pageCode + 1}+')'" th:text="${page.pageCode + 1}"></a>
+                    </li>
+                    <li th:if="${page.pageCode + 2 <= page.totalPage}">
+                        <a href="#" th:onclick="'javascript:findByPage('+${page.pageCode + 2}+')'" th:text="${page.pageCode + 2}"></a>
+                    </li>
+                    <li th:if="${page.pageCode < page.totalPage}">
+                        <a href="#" th:onclick="'javascript:findByPage('+${page.pageCode + 1}+')'">&raquo;</a>
+                    </li>
+                    <li>
+                        <a href="#" th:onclick="'javascript:findByPage('+${page.totalPage}+')'"><strong>末页</strong></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+
+    <!-- 删除的模态框 -->
+    <div class="modal fade" id="trashModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- 模糊框头部 -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title">警告！</h4>
+                </div>
+                <!-- 模糊框主体 -->
+                <div class="modal-body">
+                    <strong>你确定要删除吗？</strong>
+                </div>
+                <!-- 模糊框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="delSure btn btn-info" data-dismiss="modal">确定</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑的模态框 -->
+    <form class="form-horizontal" role="form" method="post" action="/customer/update"
+          id="form_edit">
+        <div class="modal fade" id="editModal" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">修改客户信息</h4>
+                    </div>
+                    <div class="modal-body" style="margin-left: 80px;">
+                        <input name="id" id="id" hidden="hidden"/>
+                        <div class="form-group form-inline">
+                            <label>客户姓名：</label>
+                            <input type="text" name="name" class="form-control" id="name"/>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="form-group form-inline">
+                            <label>客户电话：</label>
+                            <input type="text" name="telephone" class="form-control" id="telephone"/>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="form-group form-inline">
+                            <label>客户住址：</label>
+                            <input type="text" name="address" class="form-control" id="address"/>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="form-group form-inline">
+                            <label>客户备注：</label>
+                            <input type="text" name="remark" class="form-control" id="remark"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="editSure btn btn-info" data-dismiss="modal">修改</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+<script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    // 删除信息的方法
+    function trash(id) {
+        if (!id) {
+            alert("error");
+        } else {
+            $(".delSure").click(function () {
+                $.ajax({
+                    url: '/customer/delete?id=' + id,
+                    type: 'POST',
+                    success: function (data) {
+                        $("body").html(data);
+                    }
+                });
+            });
+        }
+    }
+
+
+    // 编辑信息的方法
+    function edit(id) {
+        if (!id) {
+            alert("error");
+        } else {
+            // 先去查询数据
+            $.ajax({
+                url: '/customer/findById',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify({
+                    id: id
+                }),
+                success: function (data) {
+                    $("#id").val(data.id);
+                    $("#name").val(data.name);
+                    $("#telephone").val(data.telephone);
+                    $("#address").val(data.address);
+                    $("#remark").val(data.remark);
+                    $("#editModal").modal('show');
+                },
+                error: function () {
+                    alert("错误");
+                }
+            });
+        }
+    }
+
+    //提交表单的方法
+    $(".editSure").click(function () {
+        $("#form_edit").submit();
+    });
+
+    function findByPage(page){
+        $(window).attr('location','/customer/findByPage?pageCode='+page+'&pageSize='+ $("#size").val());
+    }
+
+</script>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
+</head>
+<body>
+<!-- 导航栏 -->
+<div class="sidebar text-left">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">SSM整合</a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li><a href="/customer/toSavePage"><strong>添加信息功能</strong></a></li>
+                    <li><a href="/customer/toListPage"><strong>分页查询功能</strong></a></li>
+                    <li><a>Create by TyCoding</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<br/>
+<br/>
+<br/>
+<p th:text="${message}" />
+
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
+</head>
+<body>
+<!-- 导航栏 -->
+<div class="sidebar text-left">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">SSM整合</a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li><a href="/customer/toSavePage"><strong>添加信息功能</strong></a></li>
+                    <li><a href="/customer/toListPage"><strong>分页查询功能</strong></a></li>
+                    <li><a>Create by xiongyilun</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<div class="container">
+    <h1 class="text-center">客户信息添加页面</h1>
+    <hr/>
+    <br/>
+    <form class="form-inline text-center" action="/customer/save" method="post">
+        <div class="form-group form-inline">
+            <label>客户姓名：</label>
+            <input type="text" name="name" class="form-control"/>
+        </div>
+        <br/>
+        <br/>
+        <div class="form-group form-inline">
+            <label>客户电话：</label>
+            <input type="text" name="telephone" class="form-control"/>
+        </div>
+        <br/>
+        <br/>
+        <div class="form-group form-inline">
+            <label>客户住址：</label>
+            <input type="text" name="address" class="form-control"/>
+        </div>
+        <br/>
+        <br/>
+        <div class="form-group form-inline">
+            <label>客户备注：</label>
+            <input type="text" name="remark" class="form-control"/>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <input type="submit" class="btn btn-info text-center"/>
+        <input type="reset" class="btn btn-info text-center"/>
+    </form>
+</div>
+
+</body>
+</html>
